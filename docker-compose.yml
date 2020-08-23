@@ -15,15 +15,35 @@ services:
     command: sh -c 'rm -f tmp/pids/server.pid && rails s -b 0.0.0.0'
     volumes:
       - .:/nn-demo
-    environment:
-      DATABASE_URL: postgres://postgres:password@db/
     depends_on:
       - db
+      - redis
+    environment:
+      DATABASE_URL: postgres://postgres:password@db
+      REDIS_URL: redis://redis
     ports:
       - 3000:3000
     tty: true
     stdin_open: true
     container_name: nn-demo_api
+
+  redis:
+    image: redis:alpine
+
+  worker:
+    build: .
+    command: sidekiq
+    volumes:
+      - .:/nn-demo
+    depends_on:
+      - db
+      - redis
+    environment:
+      DATABASE_URL: postgres://postgres:password@db
+      REDIS_URL: redis://redis
+    tty: true
+    stdin_open: true
+    container_name: nn-demo_worker
 
 volumes:
   db:
