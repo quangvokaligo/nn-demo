@@ -10,10 +10,27 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_08_23_113523) do
+ActiveRecord::Schema.define(version: 2020_08_23_131235) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "purchase_eraser_transactions", force: :cascade do |t|
+    t.string "_id", null: false
+    t.bigint "user_id", null: false
+    t.integer "product_type", null: false
+    t.integer "status", default: 0, null: false
+    t.decimal "amount", null: false
+    t.string "currency", null: false
+    t.string "category_code"
+    t.integer "points", null: false
+    t.string "passed_checks", null: false, array: true
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["_id"], name: "index_purchase_eraser_transactions_on__id"
+    t.index ["status"], name: "index_purchase_eraser_transactions_on_status"
+    t.index ["user_id"], name: "index_purchase_eraser_transactions_on_user_id"
+  end
 
   create_table "webhooks", force: :cascade do |t|
     t.jsonb "payload", null: false
