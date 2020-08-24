@@ -12,7 +12,7 @@ class ProcessVisaTransactionWebhookJob < ApplicationJob
     @txn, err = PurchaseEraserTransaction.build_and_validate(**transaction_params)
     return log_error(err) if err
 
-    passed_checks, failed_checks = PurchaseEraser::EligibilityHelper.check_eligibility(@txn)
+    passed_checks, failed_checks = PurchaseEraser::Helper.check_eligibility(@txn)
     return log_error("These checks are failed: #{failed_checks.map(&:name)}") if failed_checks.any?
 
     @txn.update(passed_checks: passed_checks.map(&:name))
@@ -38,8 +38,8 @@ class ProcessVisaTransactionWebhookJob < ApplicationJob
       product_type: :auto,
       user_id: @user.id,
       amount: webhook_params["Transaction.TransactionAmount"],
-      currency: find_currency(webhook_params["Transaction.TransactionCurrencyCode"]),
-      category_code: webhook_params["Transaction.TransactionCategoryCode"]
+      currency: find_currency(webhook_params["Transaction.CurrencyCodeNumeric"]),
+      category_code: webhook_params["Transaction.MerchantCategoryCode"]
     }
   end
 

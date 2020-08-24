@@ -5,5 +5,11 @@ module Pb
 
       [rand(1000..1000000), nil]
     end
+
+    def self.redeem(source_id:, points:)
+      return [true, false].sample ? [source_id, nil] : [nil, "Random network error"] if Rails.env.test?
+
+      [source_id, nil]
+    end
   end
 end

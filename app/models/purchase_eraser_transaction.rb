@@ -5,9 +5,14 @@ class PurchaseEraserTransaction < ApplicationRecord
   }
   SUPPORTED_CURRENCIES = %w[AUD USD]
   SUPPORTED_CATEGORIES = %w[NCPC ASDF]
+  AUTO_EXPIRE_TIME = 1.hour
 
   enum product_type: %i[on_demand auto]
-  enum status: %i[to_be_confirmed redeemed refunded]
+  enum status: %i[to_be_confirmed redeemed refunded redeem_failed]
+
+  belongs_to :points_transaction, optional: true
+
+  scope :not_expired, -> { where(created_at: ..Time.current + AUTO_EXPIRE_TIME) }
 
   validates :_id, presence: true
   validates :user_id, presence: true

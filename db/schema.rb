@@ -10,10 +10,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_08_23_131235) do
+ActiveRecord::Schema.define(version: 2020_08_24_034721) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "points_transactions", force: :cascade do |t|
+    t.string "source_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
 
   create_table "purchase_eraser_transactions", force: :cascade do |t|
     t.string "_id", null: false
@@ -27,7 +33,9 @@ ActiveRecord::Schema.define(version: 2020_08_23_131235) do
     t.string "passed_checks", null: false, array: true
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.bigint "points_transaction_id"
     t.index ["_id"], name: "index_purchase_eraser_transactions_on__id"
+    t.index ["points_transaction_id"], name: "index_purchase_eraser_transactions_on_points_transaction_id"
     t.index ["status"], name: "index_purchase_eraser_transactions_on_status"
     t.index ["user_id"], name: "index_purchase_eraser_transactions_on_user_id"
   end
@@ -38,4 +46,5 @@ ActiveRecord::Schema.define(version: 2020_08_23_131235) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  add_foreign_key "purchase_eraser_transactions", "points_transactions"
 end

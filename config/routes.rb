@@ -4,4 +4,10 @@ Rails.application.routes.draw do
   namespace :ext do
     resources :webhooks, only: :create
   end
+
+  namespace :int do
+    resources :purchase_eraser_transactions, only: :show do
+      post :confirm, on: :member
+    end
+  end
 end
