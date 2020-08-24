@@ -5,7 +5,7 @@ class Int::PurchaseEraserTransactionsController < ApplicationController
 
   def confirm
     txn = PurchaseEraserTransaction.auto.to_be_confirmed.not_expired.find(params[:id])
-    points_activity, err = PurchaseEraser::Helper.redeem(txn)
+    points_activity, err = PurchaseEraser.redeem(txn)
 
     if err
       render status: 400, json: { errors: err }

@@ -5,6 +5,8 @@ class Ext::WebhooksController < ApplicationController
 
     ProcessVisaTransactionWebhookJob.perform_later webhook.id
     render status: :created, json: webhook
+  rescue ActionController::ParameterMissing => e
+    render status: :bad_request, json: { errors: e.message }
   end
 
   private

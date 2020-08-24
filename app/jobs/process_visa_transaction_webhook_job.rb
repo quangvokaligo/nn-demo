@@ -12,7 +12,7 @@ class ProcessVisaTransactionWebhookJob < ApplicationJob
     @txn, err = PurchaseEraserTransaction.build_and_validate(**transaction_params)
     return log_error(err) if err
 
-    passed_checks, failed_checks = PurchaseEraser::Helper.check_eligibility(@txn)
+    passed_checks, failed_checks = PurchaseEraser.check_eligibility(@txn)
     return log_error("These checks are failed: #{failed_checks.map(&:name)}") if failed_checks.any?
 
     @txn.update(passed_checks: passed_checks.map(&:name))

@@ -16,7 +16,7 @@ ActiveRecord::Schema.define(version: 2020_08_24_034721) do
   enable_extension "plpgsql"
 
   create_table "points_transactions", force: :cascade do |t|
-    t.string "source_id"
+    t.string "_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
